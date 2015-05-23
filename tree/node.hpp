@@ -58,7 +58,6 @@ public:
 	 	add(data);
 	}
 	~Node() {
-		cout << "del " << data[0] << endl;
 		if(filled > 0)
 			for(char i=0; i<=filled; i++)
 				delete children[i];
@@ -87,6 +86,16 @@ public:
 				children[i] = nullptr;
 		this->data[filled++] = data;
 	}
+
+	/**
+	 * @brief adds nodes T values to current node
+	 * @details it does not add children nodes!
+	 */
+	void add(const Node<T>& n) {
+		for(char i=0; i<n.filled; i++) {
+			add(n[i]);
+		}
+	}
 	bool isFull() const {
 		return filled >= width;
 	}
@@ -101,6 +110,20 @@ public:
 	}
 	char getCapacity() const {
 		return width;
+	}
+	bool hasChildren() const {
+		if(isEmpty())
+			return false;
+		if(children[0] != nullptr)
+			return true;
+		bool c = false;
+		for(char i=0; i<filled+1; ++i) {
+			if(children[i] != nullptr) {
+				c = true;
+				break;
+			}
+		}
+		return c;
 	}
 	void split() {
 		Node<T>* center = new Node<T>;
@@ -143,13 +166,14 @@ public:
 		for(char i=0; i<filled; i++)
 			o << data[i] << (i<filled-1?",":"");
 		o << "],\"size\":" << ((int)filled) << ",\"children\":[";
-		for(char i=0; i<filled+1; i++) {
-			if(follow && children[i] != nullptr)
-				children[i]->print(o, false, true);
-			else
-				o << children[i];
-			o << (i<filled?",":"");
-		}
+		if(filled)
+			for(char i=0; i<filled+1; i++) {
+				if(follow && children[i] != nullptr)
+					children[i]->print(o, false, true);
+				else
+					o << children[i];
+				o << (i<filled?",":"");
+			}
 		o << "]}";
 		if(endl)
 			o << std::endl;
