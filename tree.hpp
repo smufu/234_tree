@@ -17,7 +17,9 @@ public:
 		delete root;
 	}
 	void add(const T& d) {
+		cout << "HINUFÜGEN " << d << ":" << endl;
 		if(root == nullptr) {
+			cout << "FALL 0" << endl;
 			root = new Node<T>(d);
 			cout << "erstelle " << d << " breite is jetzt " << (int)(root->getSize()) << endl;
 		} else {
@@ -25,8 +27,9 @@ public:
 			Node<T>* prev = nullptr;
 			while(true) {
 				if(bkup->isFull()) {
-					cout << "split ...";
-					Node<T>* bkup2 = nullptr;
+					cout << "FALL 1" << endl;
+					//cout << "split ...";
+					/*Node<T>* bkup2 = nullptr;
 					bkup->split();
 					if(prev == nullptr)
 						root = prev = new Node<T>((*bkup)[0]);
@@ -46,9 +49,28 @@ public:
 						cout << "shit" << endl;
 					else
 						cout << "ok" << endl;
-					cout << "done" << endl;
+					cout << "done" << endl;*/
+
+					bkup->split();
+					if(prev == nullptr) {
+						root = prev = new Node<T>((*bkup)[0]);
+						(*root)[0].left() = (*bkup)[0].left();
+						(*root)[0].right() = (*bkup)[0].right();
+					} else {
+						prev->add((*bkup)[0]);
+						(*root)[prev->getSize()-1].left() = (*bkup)[0].left();
+						(*root)[prev->getSize()-1].right() = (*bkup)[0].right();
+					}
+					if(d > (*bkup)[0]) {
+						prev = (*bkup)[0].left();
+					} else {
+						prev = (*bkup)[0].right();	
+					}
+					bkup->disconnect();
+					delete bkup;
 				}
 				else if(bkup->hasChildren()) {
+					cout << "FALL 2" << endl;
 					// spulen
 					// wenn kleiner als bkup[0] dann bkup[0]->left();
 					// ansonsten wenn größer als bkup[i{0}] und kleiner als bkup[i+1{1}]   bkup[0]->right() oder bkup[1]->left()
@@ -82,6 +104,7 @@ public:
 					}
 					//return;
 				} else {
+					cout << "FALL 3" << endl;
 					//einfügen
 					cout << "füge zu" << endl;
 					if(bkup->isFull())

@@ -35,7 +35,7 @@ int main(int argc, char const *argv[])
 	baum.add(43);
 	baum.add(44);
 	cout << baum << endl;
-	for(int i=45; i<=64; i++)
+	for(int i=45; i<=46; i++)
 		baum.add(i);
 	cout << baum << endl;
 	

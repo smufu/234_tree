@@ -79,6 +79,16 @@ public:
 		);
 		return i;
 	}
+	void add(const int& data) {
+		if(data == 3)
+			cout << "DREI GEFUNDEN!!!" << endl;
+		if(filled >= width)
+			throw "Node is full";
+		if(filled == 0)
+			for(char i=0;i<width+1;i++)
+				children[(int)i] = nullptr;
+		this->data[(int)filled++] = data;
+	}/*
 	void add(const T& data) {
 		if(filled >= width)
 			throw "Node is full";
@@ -86,7 +96,7 @@ public:
 			for(char i=0;i<width+1;i++)
 				children[(int)i] = nullptr;
 		this->data[(int)filled++] = data;
-	}
+	}*/
 
 	/**
 	 * @brief adds nodes T values to current node
