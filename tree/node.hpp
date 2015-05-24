@@ -26,10 +26,11 @@ public:
 	}
 	T operator=(const T& d) {
 		*data = d;
+		return d;
 	}
 	operator T() {
 		return *data;
-	}	
+	}
 };
 
 template <typename T>
@@ -54,27 +55,27 @@ public:
 		/*+this->width = width;*/
 	 	this->data = new T[width];
 	 	children = new Node<T>*[width+1];
-	 	filled = 1;
+	 	filled = 0;
 	 	add(data);
 	}
 	~Node() {
 		if(filled > 0)
 			for(char i=0; i<=filled; i++)
-				delete children[i];
+				delete children[(int)i];
 		delete[] children;
 		delete[] data;
 	}
 	void disconnect() {
 		for(char i=0; i<filled; i++)
-			children[i] = nullptr;
+			children[(int)i] = nullptr;
 	}
 	Item<T> operator[](char index) {
 		//if(isEmpty())
 		//	throw "Node is Empty can't access item";
 		Item<T> i(
-			&children[index],
-			&children[index+1],
-			&data[index]
+			&children[(int)index],
+			&children[(int)(index+1)],
+			&data[(int)index]
 		);
 		return i;
 	}
@@ -83,8 +84,8 @@ public:
 			throw "Node is full";
 		if(filled == 0)
 			for(char i=0;i<width+1;i++)
-				children[i] = nullptr;
-		this->data[filled++] = data;
+				children[(int)i] = nullptr;
+		this->data[(int)filled++] = data;
 	}
 
 	/**
@@ -118,43 +119,50 @@ public:
 			return true;
 		bool c = false;
 		for(char i=0; i<filled+1; ++i) {
-			if(children[i] != nullptr) {
+			if(children[(int)i] != nullptr) {
 				c = true;
 				break;
 			}
 		}
 		return c;
 	}
-	void split() {
+	void split(/*Node<T>* parent=nullptr*/) {
 		Node<T>* center = new Node<T>;
 		Node<T>* left   = new Node<T>;
 		Node<T>* right  = new Node<T>;
 		char half = width/2;
 
-		(*center)[0]         = data[half];
+		(*center)[0]         = data[(int)half];
 		(*center)[0].left()  = left;
 		(*center)[0].right() = right;
 		center->setSize(1);
 
 		(*left)[0].left() = children[0];
 		for(char i=0; i<half; i++) {
-			(*left)[i]         = data[i];
-			(*left)[i].right() = children[i+1];
+			(*left)[i]         = data[(int)i];
+			(*left)[i].right() = children[(int)(i+1)];
 		}
 		left->setSize(half);
 
 		(*right)[0].left() = children[half+1];
 		for(char i=0, i2=half+1; i<half; i++, i2++) {
-			(*right)[i]         = data[i2];
-			(*right)[i].right() = children[i2+1];
+			(*right)[i]         = data[(int)i2];
+			(*right)[i].right() = children[(int)(i2+1)];
 		}
 		right->setSize(half);
 
 		delete[] data;
 		delete[] children;
-		data     = center->data;
-		children = center->children;
-		filled   = center->filled;
+
+		//if(parent == nullptr) {
+			data     = center->data;
+			children = center->children;
+			filled   = center->filled;
+		/*} else {
+			parent->add((*center)[0]);
+			(*parent)[parent->getSize()-1].left()  = left;
+			(*parent)[parent->getSize()-1].right() = right;	
+		}*/
 	}
 	char findPath(const T& d) {
 		if(filled == 1)
@@ -164,14 +172,14 @@ public:
 	void print(ostream& o=cout, bool endl=true, bool follow=true) const {
 		o << "{\"data\":[";
 		for(char i=0; i<filled; i++)
-			o << data[i] << (i<filled-1?",":"");
+			o << data[(int)i] << (i<filled-1?",":"");
 		o << "],\"size\":" << ((int)filled) << ",\"children\":[";
 		if(filled)
 			for(char i=0; i<filled+1; i++) {
-				if(follow && children[i] != nullptr)
-					children[i]->print(o, false, true);
+				if(follow && children[(int)i] != nullptr)
+					children[(int)i]->print(o, false, true);
 				else
-					o << children[i];
+					o << children[(int)i];
 				o << (i<filled?",":"");
 			}
 		o << "]}";
