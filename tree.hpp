@@ -61,13 +61,13 @@ public:
 						(*root)[prev->getSize()-1].left() = (*bkup)[0].left();
 						(*root)[prev->getSize()-1].right() = (*bkup)[0].right();
 					}
-					if(d > (*bkup)[0]) {
+					if(d < (*bkup)[0]) {
 						prev = (*bkup)[0].left();
 					} else {
 						prev = (*bkup)[0].right();	
 					}
-					bkup->disconnect();
-					delete bkup;
+					//bkup->disconnect(); // bkup is still used anywhere
+					//delete bkup;
 				}
 				else if(bkup->hasChildren()) {
 					cout << "FALL 2" << endl;
