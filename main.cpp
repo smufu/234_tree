@@ -35,16 +35,19 @@ int main(int argc, char const *argv[])
 	baum.add(43);
 	baum.add(44);
 	cout << baum << endl;
-	for(int i=45; i<=64; i++)
+	for(int i=45; i<=500; i++)
 		baum.add(i);
+	ofstream json("tree.json");
+	json << baum << endl;
 	cout << baum << endl;
-	
+
 	Writer w(baum);
 	ofstream dot("tree.dot");
 	cout << endl << "writer dump:" << endl << "===" << endl;
 	w.dump();
 	w.writeDot(dot);
-	system("dot -Tpng tree.dot -o tree.png");
-
+	system("dot -Tpng tree.dot -o tree_.png");
+	dot.close();
+	
 	return 0;
 }

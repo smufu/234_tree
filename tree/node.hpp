@@ -102,11 +102,11 @@ public:
 	 * @brief adds nodes T values to current node
 	 * @details it does not add children nodes!
 	 */
-	void add(const Node<T>& n) {
+	/*void add(const Node<T>& n) {
 		for(char i=0; i<n.filled; i++) {
 			add(n[i]);
 		}
-	}
+	}*/
 	bool isFull() const {
 		return filled >= width;
 	}
@@ -127,14 +127,12 @@ public:
 			return false;
 		if(children[0] != nullptr)
 			return true;
-		bool c = false;
 		for(char i=0; i<filled+1; ++i) {
 			if(children[(int)i] != nullptr) {
-				c = true;
-				break;
+				return true;
 			}
 		}
-		return c;
+		return false;
 	}
 	void split(/*Node<T>* parent=nullptr*/) {
 		Node<T>* center = new Node<T>;

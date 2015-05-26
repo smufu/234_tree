@@ -58,8 +58,8 @@ public:
 						(*root)[0].right() = (*bkup)[0].right();
 					} else {
 						prev->add((*bkup)[0]);
-						(*root)[prev->getSize()-1].left() = (*bkup)[0].left();
-						(*root)[prev->getSize()-1].right() = (*bkup)[0].right();
+						(*prev)[prev->getSize()-1].left() = (*bkup)[0].left();
+						(*prev)[prev->getSize()-1].right() = (*bkup)[0].right();
 					}
 					if(d < (*bkup)[0]) {
 						prev = (*bkup)[0].left();
@@ -90,17 +90,17 @@ public:
 						for(char i=0; i<bkup->getSize()-1; ++i) {
 							if(d > (*bkup)[i] && d < (*bkup)[i+1]) {
 								prev = bkup;
-								(*bkup)[i].right();
+								bkup = (*bkup)[i].right();
 								continue;
 							}
-						}
+						}/*
 						if(!bkup->isFull()) {
 							cout << "füge zu aus verzweiflung xd" << endl;
 							bkup->add(d);
 						} else {
 							cout << "Fehler unbehandelter Fall, weiß nicht was ich machen soll???" << endl;
 							throw "error tree is inconsistent state";
-						}
+						}*/
 					}
 					//return;
 				} else {
